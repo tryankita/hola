@@ -70,7 +70,8 @@ h1 {
 }
 
 #link-input {
-  width: 300px;
+    max-width: 80vw;
+width: 300px;
   padding: 0.5rem 0.75rem;
   font-family: inherit;
   font-size: 1.1rem;
@@ -174,4 +175,24 @@ video {
 #controls button.off {
   background: #c0392b;
   color: #fff;
+}
+
+
+@media (max-width: 480px) {
+  h1 {
+    font-size: 1.9rem;
+  }
+
+  #status {
+    font-size: 1.15rem;
+  }
+
+  .video-wrap.small {
+    max-width: 140px;
+  }
+
+  #controls {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
 }
