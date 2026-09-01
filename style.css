@@ -1,0 +1,93 @@
+* {
+  box-sizing: border-box;
+
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-family: sans-serif;
+  background: #fff;
+  color: #222;
+}
+
+header {
+  padding: 2rem 1rem 1rem;
+}
+
+h1 {
+  margin: 0;
+  font-size: 2rem;
+}
+
+#lobby {
+  text-align: center;
+  padding: 1rem;
+}
+
+#link-row {
+  display: flex;
+  gap: 0.5rem;
+justify-content: center;
+  margin-top: 0.5rem;
+}
+
+#link-input {
+  width: 300px;
+  padding: 0.5rem;
+}
+
+button {
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+}
+
+#call {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  width: 100%;
+}
+
+.video-wrap {
+  position: relative;
+  width: 100%;
+  max-width: 640px;
+}
+
+.video-wrap.small {
+  max-width: 200px;
+}
+
+video {
+  width: 100%;
+  border-radius: 8px;
+  background: #000;
+  display: block;
+}
+
+.tag {
+  position: absolute;
+  bottom: 0.5rem;
+  left: 0.5rem;
+  background: rgba(0, 0, 0, 0.5);
+  color: #fff;
+padding: 0.1rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.8rem;
+}
+
+#controls {
+  display: flex;
+  gap: 0.5rem;
+}
+
+#controls button.off {
+  background: #c0392b;
+  color: #fff;
+}

@@ -1,0 +1,49 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>let's talk</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <header>
+    <h1>let's talk :)</h1>
+  </header>
+
+  <main id="lobby">
+    <p id="status">setting things up...</p>
+
+    <div id="share-box" hidden>
+      <p>send this to the other person —</p>
+      <div id="link-row">
+        <input id="link-input" type="text" readonly>
+        <button id="copy-btn">copy</button>
+      </div>
+      <p id="copied-msg" hidden>copied!</p>
+    </div>
+  </main>
+
+  <main id="call" hidden>
+    <div class="video-wrap">
+      <video id="remote-video" autoplay playsinline></video>
+      <span class="tag">them</span>
+    </div>
+    <div class="video-wrap small">
+      <video id="local-video" autoplay playsinline muted></video>
+      <span class="tag">you</span>
+    </div>
+
+    <div id="controls">
+      <button id="mic-btn" title="mute mic">mic</button>
+      <button id="cam-btn" title="turn off camera">cam</button>
+      <button id="hangup-btn" title="leave call">bye</button>
+    </div>
+  </main>
+
+  <script></script>
+  <script></script>
+</body>
+</html>
