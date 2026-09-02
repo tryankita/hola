@@ -29,12 +29,28 @@ const joiningRoom = params.get("room");
 let localStream = null;
 let peer = null;
 let activeCall = null;
+let waitingTimer = null;
+
+function setStatus(text) {
+  clearInterval(waitingTimer);
+  statusEl.textContent = text;
+}
+
+function setWaitingStatus(baseText) {
+  clearInterval(waitingTimer);
+  let dots = 0;
+  statusEl.textContent = baseText;
+  waitingTimer = setInterval(() => {
+    dots = (dots + 1) % 4;
+    statusEl.textContent = baseText + ".".repeat(dots);
+  }, 450);
+}
 
 async function start() {
   try {
     localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
   } catch (err) {
-    statusEl.textContent = "couldn't get your camera/mic — check permissions and reload";
+    setStatus("couldn't get your camera/mic : check permissions and reload");    
     return;
   }
   localVideo.srcObject = localStream;
@@ -54,7 +70,7 @@ function hostRoom() {
     const link = `${window.location.origin}${window.location.pathname}/room=${roomCode}`;
     linkInput.value = link;
     shareBox.hidden = false;
-    statusEl.textContent = "waiting for the other person to join...";
+    setWaitingStatus("waiting for the other person to join");
   });
 
   peer.on("call", (call) => {
@@ -63,12 +79,12 @@ function hostRoom() {
   });
 
   peer.on("error", (err) => {
-    statusEl.textContent = "something went wrong: " + err.type;
+    setStatus("something went wrong: " + err.type);
   });
 }
 
 function joinRoom(roomCode) {
-  statusEl.textContent = "connecting...";
+  setWaitingStatus("connecting");
   peer = new Peer();
 
   peer.on("open", () => {
@@ -77,7 +93,7 @@ function joinRoom(roomCode) {
   });
 
   peer.on("error", (err) => {
-    statusEl.textContent = "couldn't connect: " + err.type;
+    setStatus("something went wrong: " + err.type);
   });
 }
 
@@ -120,7 +136,7 @@ function endCall() {
   callEl.hidden = true;
   lobbyEl.hidden = false;
   shareBox.hidden = true;
-  statusEl.textContent = "call ended — reload to start a new one";
+  setStatus("call ended : reload to start a new one");
 }
 
 start();
