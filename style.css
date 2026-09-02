@@ -12,6 +12,10 @@
   box-sizing: border-box;
 }
 
+html {
+  height: 100%;
+}
+
 body {
   margin: 0;
   min-height: 100vh;
@@ -26,16 +30,29 @@ body {
   background-image:
     radial-gradient(rgba(74, 51, 36, 0.045) 1px, transparent 1px);
   background-size: 14px 14px;
+  padding-left: env(safe-area-inset-left);
+  padding-right: env(safe-area-inset-right);
+  overscroll-behavior-y: contain;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
 }
 
 header {
-  padding: 2rem 1rem 1rem;
+  padding: clamp(1.25rem, 5vh, 2.5rem) 1rem 0.5rem;
+  padding-top: calc(clamp(1.25rem, 5vh, 2.5rem) + env(safe-area-inset-top));
 }
 
 h1 {
   margin: 0;
   font-family: "Permanent Marker", cursive;
-  font-size: 2.5rem;
+  font-size: clamp(1.9rem, 6vw, 2.5rem);
   font-weight: normal;
   color: var(--terracotta-dark);
   transform: rotate(-2deg);
@@ -44,10 +61,18 @@ h1 {
 
 #lobby {
   text-align: center;
+  flex: 1;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   padding: 1rem;
+  gap: 0.5rem;
 }
 
 #status {
+  max-width: 26ch;
   font-size: 1.4rem;
 }
 
@@ -59,6 +84,7 @@ h1 {
   margin-top: 1rem;
   transform: rotate(1deg);
   box-shadow: 4px 5px 0 rgba(74, 51, 36, 0.15);
+  max-width: 90vw;
 }
 
 #link-row {
@@ -70,9 +96,9 @@ h1 {
 }
 
 #link-input {
-    max-width: 80vw;
-width: 300px;
-  padding: 0.5rem 0.75rem;
+  width: 300px;
+  max-width: 75vw;
+  padding: 0.6rem 0.75rem;
   font-family: inherit;
   font-size: 1.1rem;
   border: 2px dashed var(--terracotta);
@@ -98,6 +124,7 @@ button {
   border-radius: 10px 12px 9px 13px / 12px 9px 13px 10px;
   box-shadow: 2px 3px 0 rgba(74, 51, 36, 0.35);
   transition: transform 0.1s ease;
+  touch-action: manipulation;
 }
 
 button:nth-of-type(2n) {
@@ -123,17 +150,52 @@ button:active {
   align-items: center;
   gap: 1rem;
   padding: 1rem;
+  padding-bottom: calc(1rem + env(safe-area-inset-bottom));
   width: 100%;
+  min-height: 0;
+}
+
+#stage {
+  position: relative;
+  flex: 1;
+  width: 100%;
+  max-width: 640px;
+  min-height: 0;
 }
 
 .video-wrap {
   position: relative;
   width: 100%;
   max-width: 640px;
+  background: #fffdf6;
+  padding: 0.5rem;
+  border-radius: 3px;
+  box-shadow: 0 6px 14px rgba(74, 51, 36, 0.25);
 }
 
 .video-wrap.small {
   max-width: 200px;
+}
+
+.video-wrap.remote {
+  position: absolute;
+  inset: 0;
+  transform: rotate(-0.6deg);
+}
+
+.video-wrap.remote video {
+  height: 100%;
+}
+
+.video-wrap.local {
+  position: absolute;
+  right: 0.6rem;
+  bottom: 0.6rem;
+  width: 32%;
+  max-width: 170px;
+  min-width: 92px;
+  transform: rotate(2deg);
+  z-index: 2;
 }
 
 video {
@@ -141,6 +203,11 @@ video {
   border-radius: 8px;
   background: #000;
   display: block;
+  object-fit: cover;
+}
+
+#local-video {
+  transform: scaleX(-1);
 }
 
 .video-wrap::before {
@@ -156,6 +223,19 @@ video {
   box-shadow: 0 1px 2px rgba(74, 51, 36, 0.3);
 }
 
+.video-wrap.local .tag {
+  bottom: 0.4rem;
+  left: 0.4rem;
+  font-size: 0.75rem;
+  padding: 0 0.4rem;
+}
+
+.video-wrap.local::before {
+  width: 34px;
+  height: 16px;
+  top: -8px;
+}
+
 .tag {
   position: absolute;
   bottom: 0.5rem;
@@ -167,6 +247,70 @@ video {
   font-size: 0.8rem;
 }
 
+#controls {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+#controls .control {
+  transform: none;
+  box-shadow: 0 3px 6px rgba(74, 51, 36, 0.3);
+}
+
+#controls .control:hover {
+  transform: translateY(-2px);
+}
+
+#controls .control:active {
+  transform: translateY(1px);
+  box-shadow: 0 1px 3px rgba(74, 51, 36, 0.3);
+}
+
+.control {
+  width: 52px;
+  height: 52px;
+  padding: 0;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.control .icon {
+  width: 24px;
+  height: 24px;
+}
+
+.control .icon.off {
+  display: none;
+}
+
+.control.off .icon.on {
+  display: none;
+}
+
+.control.off .icon.off {
+  display: block;
+}
+
+.control.off {
+  background: #c0392b;
+  color: #fff;
+}
+
+.control.leave {
+  background: var(--terracotta-dark);
+  color: #fffdf6;
+  width: 60px;
+  height: 60px;
+}
+
+.control.leave .icon {
+  transform: rotate(135deg);
+}
+
+@media (max-width: 480px) {
 #controls {
   display: flex;
   gap: 0.5rem;
@@ -194,5 +338,31 @@ video {
   #controls {
     flex-wrap: wrap;
     justify-content: center;
+  }
+}  .video-wrap.local {
+    width: 34%;
+    min-width: 82px;
+}
+
+  .control {
+    width: 56px;
+    height: 56px;
+  }
+
+  .control.leave {
+    width: 64px;
+    height: 64px;
+  }
+}
+
+@media (min-width: 640px) {
+  .control {
+    width: 58px;
+    height: 58px;
+  }
+
+  .control .icon {
+    width: 26px;
+    height: 26px;
   }
 }
