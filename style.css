@@ -185,9 +185,12 @@ button:active {
   position: absolute;
   inset: 0;
   transform: rotate(-0.6deg);
+  width: 100%;
+  height: 100%;
 }
 
 .video-wrap.remote video {
+  width: 100%;
   height: 100%;
 }
 

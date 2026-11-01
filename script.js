@@ -13,7 +13,7 @@ function makeRoomCode() {
 const statusEl = document.getElementById("status");
 const lobbyEl = document.getElementById("lobby");
 const callEl = document.getElementById("call");
-const shareBox = document.getElemen;
+const shareBox = document.getElementById("share-box");
 const linkInput = document.getElementById("link-input");
 const copyBtn = document.getElementById("copy-btn");
 const copiedMsg = document.getElementById("copied-msg");
@@ -64,18 +64,20 @@ async function start() {
 
 function hostRoom() {
   const roomCode = makeRoomCode();
-  peer = new Peer(roomCode);
+  peer = new Peer(roomCode, {
+    iceServers: [{ urls: "stun:stun.l.google.com:19302" }]
+  });
 
   peer.on("open", () => {
-    const link = `${window.location.origin}${window.location.pathname}/room=${roomCode}`;
+    const link = `${window.location.origin}/?room=${roomCode}`;
     linkInput.value = link;
     shareBox.hidden = false;
     setWaitingStatus("waiting for the other person to join");
   });
 
   peer.on("call", (call) => {
-    call.answer(localStream);
     wireUpCall(call);
+    call.answer(localStream);
   });
 
   peer.on("error", (err) => {
@@ -85,7 +87,9 @@ function hostRoom() {
 
 function joinRoom(roomCode) {
   setWaitingStatus("connecting");
-  peer = new Peer();
+  peer = new Peer(undefined, {
+    iceServers: [{ urls: "stun:stun.l.google.com:19302" }]
+  });
 
   peer.on("open", () => {
     const call = peer.call(roomCode, localStream);
@@ -100,11 +104,21 @@ function joinRoom(roomCode) {
 function wireUpCall(call) {
   activeCall = call;
   call.on("stream", (remoteStream) => {
+    console.log("Received stream:", remoteStream);
+    console.log("Remote video element:", remoteVideo);
     remoteVideo.srcObject = remoteStream;
+    console.log("Set srcObject, readyState:", remoteVideo.readyState);
+    
+    remoteVideo.onloadedmetadata = () => {
+      console.log("Metadata loaded, playing...");
+      remoteVideo.play();
+    };
+    
     lobbyEl.hidden = true;
     callEl.hidden = false;
   });
   call.on("close", endCall);
+  call.on("error", (err) => console.error("Call error:", err));
 }
 
 copyBtn.addEventListener("click", () => {
