@@ -69,7 +69,7 @@ The application uses PeerJS to establish peer-to-peer connections and WebRTC to 
 
 6. The other person can open the shared link in their browser to join the call.
 
-8. Use the microphone and camera buttons to control your audio and video. Select the hang-up button to end the call.
+7. Use the microphone and camera buttons to control your audio and video. Select the hang-up button to end the call.
 
 **Camera or microphone not working**
 
